@@ -1,62 +1,59 @@
 ﻿using ProductsWebApi.Interface;
 using ProductsWebApi.Models;
-using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ProductsWebApi.Repository
+namespace ProductsWebAPI.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private List<Product> products = new List<Product>();
-        private int _nextProductId = 1;
+        private List<Product> _productItems;
 
-        public ProductRepository()
+        public ProductRepository(IProductRepository productRepository)
         {
-            AddProduct(new Product { Id = 1, Name = "Vegetables", Description = "Groceries", Price = 1.20M, Quantity = 2 });
-            AddProduct(new Product { Id = 2, Name = "Teddy Bear", Description = "Toys", Price = 3.75M, Quantity = 5 });
-            AddProduct(new Product { Id = 3, Name = "Hammer", Description = "Hardware", Price = 16.99M, Quantity = 4 });
+            _productItems = new List<Product>();
         }
 
-        public IEnumerable<Product> GetProducts()
+        public async Task<List<Product>> GetProducts()
         {
-            return products;
+            return _productItems;
         }
 
-        public Product GetProducts(int productId)
+        public async Task<Product> GetProductById(string productId)
         {
-            return products.Find(p => p.Id == productId);
+            return _productItems.FirstOrDefault(x => x.Id == productId);
         }
 
-        public Product AddProduct(Product productModel)
+        public async Task<Product> AddProduct(Product productItem)
         {
-            if (productModel == null)
+            _productItems.Add(productItem);
+            return productItem;
+        }
+
+        public async Task<Product> UpdateProduct(string id, Product productItem)
+        {
+            for (var index = _productItems.Count - 1; index >= 0; index--)
             {
-                throw new ArgumentNullException("product is null");
+                if (_productItems[index].Id == id)
+                {
+                    _productItems[index] = productItem;
+                }
             }
-            productModel.Id = _nextProductId++;
-            products.Add(productModel);
-            return productModel;
+            return productItem;
         }
 
-        public bool UpdateProduct(Product productModel)
+        public async Task<string> DeleteProduct(string id)
         {
-            if (productModel == null)
+            for (var index = _productItems.Count - 1; index >= 0; index--)
             {
-                throw new ArgumentNullException("product is null");
+                if (_productItems[index].Id == id)
+                {
+                    _productItems.RemoveAt(index);
+                }
             }
-            int index = products.FindIndex(p => p.Id == productModel.Id);
-            if (index == -1)
-            {
-                return false;
-            }
-            products.RemoveAt(index);
-            products.Add(productModel);
-            return true;
-        }
 
-        public void DeleteProduct(int productId)
-        {
-            products.RemoveAll(p => p.Id == productId);
+            return id;
         }
     }
 }

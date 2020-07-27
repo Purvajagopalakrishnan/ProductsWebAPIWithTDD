@@ -2,42 +2,42 @@
 using ProductsWebApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProductsWebApi.Service
+namespace ProductsWebApi.Services
 {
-    public class ProductService : IProductService
+    public class ProductsService : IProductsService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductsService _productsService;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductsService(IProductsService productsService)
         {
-            _productRepository = productRepository;
-        }
-        public Product AddProduct(Product productModel)
-        {
-            return _productRepository.AddProduct(productModel);
+            _productsService = productsService;
         }
 
-        public void DeleteProduct(int productId)
+        public async Task<List<Product>> GetProducts()
         {
-            _productRepository.DeleteProduct(productId);
+            return await _productsService.GetProducts();
         }
 
-        public IEnumerable<Product> GetProducts()
+        public async Task<Product> GetProductById(string productId)
         {
-            return _productRepository.GetProducts();
+            return await _productsService.GetProductById(productId);
         }
 
-        public Product GetProducts(int productId)
+        public async Task<Product> AddProduct(Product productItem)
         {
-            return _productRepository.GetProducts(productId);
+            return await _productsService.AddProduct(productItem);
         }
 
-        public bool UpdateProduct(Product productModel)
+        public async Task<Product> UpdateProduct(string id, Product productItem)
         {
-            return _productRepository.UpdateProduct(productModel);
+            return await _productsService.UpdateProduct(id, productItem);
+        }
+
+        public async Task<string> DeleteProduct(string id)
+        {
+            return await _productsService.DeleteProduct(id);
         }
     }
 }

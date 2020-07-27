@@ -1,107 +1,99 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ProductsWebApi.Models;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using ProductsWebApi.Interface;
-using System.Web.Http;
-using System.Net;
+using ProductsWebApi.Models;
 
 namespace ProductsWebApi.Controllers
 {
-    [Microsoft.AspNetCore.Mvc.Route("api")]
     [ApiController]
+    [Route("[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly ILogger _logger;
-        private readonly IProductService _productService;
+        private ILogger _logger;
+        private IProductsService _productsService;
 
-        public ProductsController(IProductService productService, ILogger<ProductsController> logger)
+        public ProductsController(IProductsService productsService, ILogger logger)
         {
-            _productService = productService;
+            _productsService = productsService;
             _logger = logger;
         }
 
-        [Microsoft.AspNetCore.Mvc.Route("/api/getProducts/{productId:int}")]
-        [Microsoft.AspNetCore.Mvc.HttpGet]
-        public Product GetProduct(int productId)
+        [HttpGet("/api/products")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProducts()
         {
             try
             {
-                Product product = _productService.GetProducts(productId);
-                if (product == null)
-                {
-                    throw new Exception();
-                }
-                return product;
+                return Ok(await _productsService.GetProducts());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError); ;
-            }
-        }
-        [Microsoft.AspNetCore.Mvc.Route("/api/getProducts")]
-        [Microsoft.AspNetCore.Mvc.HttpGet]
-        public IEnumerable<Product> GetAllProducts()
-        {
-            try
-            {
-                return _productService.GetProducts();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
-        }
-        [Microsoft.AspNetCore.Mvc.Route("/api/addProduct")]
-        [Microsoft.AspNetCore.Mvc.HttpPost]
-        public Product AddProduct([Microsoft.AspNetCore.Mvc.FromBody] Product productModel)
-        {
-            try
-            {
-                var product = _productService.AddProduct(productModel);
-                return product;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError); ;
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
 
-        [Microsoft.AspNetCore.Mvc.Route("api/deleteProduct/{productId:int}")]
-        [Microsoft.AspNetCore.Mvc.HttpDelete]
-        public ActionResult DeleteProduct(int productId)
-        {
-            Product product = _productService.GetProducts(productId);
-            if (product == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-            _productService.DeleteProduct(productId);
-            return Ok();
-        }
-
-        [Microsoft.AspNetCore.Mvc.Route("{productId:int}")]
-        [Microsoft.AspNetCore.Mvc.HttpPut]
-        public void UpdateProduct(int productId, [Microsoft.AspNetCore.Mvc.FromBody] Product productModel)
+        [Route("/api/products/{productId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetProductById(string productId)
         {
             try
             {
-                productModel.Id = productId;
-                if (!_productService.UpdateProduct(productModel))
-                {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
+                var product = _productsService.GetProductById(productId);
+                return Ok(product);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError); ;
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("/api/products")]
+        public async Task<IActionResult> AddProduct(Product product)
+        {
+            try
+            {
+                await _productsService.AddProduct(product);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPut("/api/products/{id}")]
+        public async Task<IActionResult> UpdateProduct(string id, Product product)
+        {
+            try
+            {
+                await _productsService.UpdateProduct(id, product);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpDelete("/api/products/{id}")]
+        public async Task<IActionResult> DeleteProduct(string id)
+        {
+            try
+            {
+                await _productsService.DeleteProduct(id);
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
     }

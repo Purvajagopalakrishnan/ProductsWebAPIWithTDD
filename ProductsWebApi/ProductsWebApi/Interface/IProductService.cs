@@ -1,17 +1,19 @@
 ﻿using ProductsWebApi.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProductsWebApi.Interface
 {
-    public interface IProductService
+    public interface IProductsService
     {
-        IEnumerable<Product> GetProducts();
-        Product GetProducts(int productId);
-        Product AddProduct(Product productModel);
-        bool UpdateProduct(Product productModel);
-        void DeleteProduct(int productId);
+        Task<List<Product>> GetProducts();
+
+        Task<Product> GetProductById(string productId);
+
+        Task<Product> AddProduct(Product productItem);
+
+        Task<Product> UpdateProduct(string id, Product productItem);
+
+        Task<string> DeleteProduct(string id);
     }
 }
