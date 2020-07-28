@@ -9,7 +9,7 @@ using ProductsWebApi.Models;
 namespace ProductsWebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
         private ILogger _logger;
@@ -21,7 +21,7 @@ namespace ProductsWebApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet("/api/products")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProducts()
         {
@@ -36,7 +36,7 @@ namespace ProductsWebApi.Controllers
             }
         }
 
-        [Route("/api/products/{productId}")]
+        [Route("{productId}")]
         [HttpGet]
         public async Task<IActionResult> GetProductById(string productId)
         {
@@ -52,7 +52,7 @@ namespace ProductsWebApi.Controllers
             }
         }
 
-        [HttpPost("/api/products")]
+        [HttpPost]
         public async Task<IActionResult> AddProduct(Product product)
         {
             try
@@ -67,7 +67,7 @@ namespace ProductsWebApi.Controllers
             }
         }
 
-        [HttpPut("/api/products/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, Product product)
         {
             try
@@ -82,7 +82,7 @@ namespace ProductsWebApi.Controllers
             }
         }
 
-        [HttpDelete("/api/products/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
             try

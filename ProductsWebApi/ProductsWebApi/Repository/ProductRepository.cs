@@ -10,7 +10,7 @@ namespace ProductsWebAPI.Repository
     {
         private List<Product> _productItems;
 
-        public ProductRepository(IProductRepository productRepository)
+        public ProductRepository()
         {
             _productItems = new List<Product>();
         }

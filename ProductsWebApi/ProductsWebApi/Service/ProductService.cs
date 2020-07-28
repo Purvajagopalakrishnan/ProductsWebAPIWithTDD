@@ -8,36 +8,36 @@ namespace ProductsWebApi.Services
 {
     public class ProductsService : IProductsService
     {
-        private readonly IProductsService _productsService;
+        private readonly IProductRepository _productRepository;
 
-        public ProductsService(IProductsService productsService)
+        public ProductsService(IProductRepository productRepository)
         {
-            _productsService = productsService;
+            _productRepository = productRepository;
         }
 
         public async Task<List<Product>> GetProducts()
         {
-            return await _productsService.GetProducts();
+            return await _productRepository.GetProducts();
         }
 
         public async Task<Product> GetProductById(string productId)
         {
-            return await _productsService.GetProductById(productId);
+            return await _productRepository.GetProductById(productId);
         }
 
         public async Task<Product> AddProduct(Product productItem)
         {
-            return await _productsService.AddProduct(productItem);
+            return await _productRepository.AddProduct(productItem);
         }
 
         public async Task<Product> UpdateProduct(string id, Product productItem)
         {
-            return await _productsService.UpdateProduct(id, productItem);
+            return await _productRepository.UpdateProduct(id, productItem);
         }
 
         public async Task<string> DeleteProduct(string id)
         {
-            return await _productsService.DeleteProduct(id);
+            return await _productRepository.DeleteProduct(id);
         }
     }
 }
