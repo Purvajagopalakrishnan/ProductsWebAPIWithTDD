@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using ProductsWebApi.Interface;
 using ProductsWebApi.Services;
 using ProductsWebAPI.Repository;
@@ -25,6 +26,11 @@ namespace ProductsWebApi
             services.AddControllers();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductsService, ProductsService>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductsWebApi", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +40,14 @@ namespace ProductsWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductsWebApi");
+            });
+
 
             app.UseHttpsRedirection();
 
