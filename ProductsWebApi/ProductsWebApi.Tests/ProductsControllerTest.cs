@@ -35,7 +35,6 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var expectedResult = _fixture.Build<Product>().CreateMany().ToList();
-
             _mockProductsService.Setup(x => x.GetProducts()).ReturnsAsync(expectedResult);
 
             //Act
@@ -43,13 +42,9 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.Equal(StatusCodes.Status200OK, actualResult.StatusCode);
-
             Assert.IsType<List<Product>>(actualResult.Value);
-
             Assert.NotNull(actualResult.Value);
-
             Assert.Equal(expectedResult, actualResult.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -64,9 +59,7 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.Equal(StatusCodes.Status200OK, actualResult.StatusCode);
-
             Assert.Null(actualResult.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -75,7 +68,6 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var expectedResult = _fixture.Build<Product>().Create();
-
             _mockProductsService.Setup(x => x.GetProductById(expectedResult.Id)).ReturnsAsync(expectedResult);
 
             //Act
@@ -83,13 +75,9 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.Equal(StatusCodes.Status200OK, actualResult.StatusCode);
-
             Assert.IsType<List<Product>>(actualResult.Value);
-
             Assert.NotNull(actualResult.Value);
-
             Assert.Equal(expectedResult, actualResult.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -98,7 +86,6 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var expectedException = _fixture.Create<Exception>();
-
             _mockProductsService.Setup(x => x.GetProducts()).Throws(expectedException);
 
             //Act
@@ -106,11 +93,8 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.Equal(StatusCodes.Status500InternalServerError, actualException.StatusCode);
-
             Assert.IsType<Exception>(actualException.Value);
-
             Assert.Equal(expectedException, actualException.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -119,7 +103,6 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var expectedResult = _fixture.Build<Product>().Create();
-
             _mockProductsService.Setup(x => x.AddProduct(expectedResult)).ReturnsAsync(expectedResult);
 
             //Act
@@ -127,13 +110,9 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.NotNull(actualResult);
-
             Assert.Equal(StatusCodes.Status200OK, actualResult.StatusCode);
-
             Assert.IsType<Product>(actualResult.Value);
-
             Assert.Equal(expectedResult, actualResult.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -142,9 +121,7 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var productRequestObj = _fixture.Build<Product>().Create();
-
             var expectedException = _fixture.Create<Exception>();
-
             _mockProductsService.Setup(x => x.AddProduct(productRequestObj)).Throws(expectedException);
 
             //Act
@@ -152,11 +129,8 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.Equal(StatusCodes.Status500InternalServerError, actualException.StatusCode);
-
             Assert.IsType<Exception>(actualException.Value);
-
             Assert.Equal(expectedException, actualException.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -165,7 +139,6 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var expectedResult = _fixture.Build<Product>().Create();
-
             _mockProductsService.Setup(x => x.UpdateProduct(expectedResult.Id, expectedResult)).ReturnsAsync(expectedResult);
 
             //Act
@@ -173,13 +146,9 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.NotNull(actualResult);
-
             Assert.Equal(StatusCodes.Status200OK, actualResult.StatusCode);
-
             Assert.IsType<Product>(actualResult.Value);
-
             Assert.Equal(expectedResult, actualResult.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -188,9 +157,7 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var productRequestObj = _fixture.Build<Product>().Create();
-
             var expectedException = _fixture.Create<Exception>();
-
             _mockProductsService.Setup(x => x.UpdateProduct(productRequestObj.Id, productRequestObj)).Throws(expectedException);
             
             //Act
@@ -198,11 +165,8 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.Equal(StatusCodes.Status500InternalServerError, actualException.StatusCode);
-            
             Assert.IsType<Exception>(actualException.Value);
-
             Assert.Equal(expectedException, actualException.Value);
-
             _mockProductsService.VerifyAll();
         }
 
@@ -211,7 +175,6 @@ namespace ProductsWebApi.Tests
         {
             //Arrange
             var expectedResult = _fixture.Build<Product>().Create();
-
             _mockProductsService.Setup(x => x.DeleteProduct(expectedResult.Id)).ReturnsAsync(expectedResult.Id);
             
             //Act
@@ -219,11 +182,8 @@ namespace ProductsWebApi.Tests
 
             //Assert
             Assert.Equal(StatusCodes.Status200OK, actualResult.StatusCode);
-
             Assert.IsType<Exception>(actualResult.Value);
-
             Assert.Equal(expectedResult, actualResult.Value);
-
             _mockProductsService.VerifyAll();
         }
     }
