@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProductsWebApi.DbFactory;
 using ProductsWebApi.Interface;
 using ProductsWebApi.Services;
 using ProductsWebAPI.Repository;
@@ -26,6 +28,8 @@ namespace ProductsWebApi
             services.AddControllers();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductsService, ProductsService>();
+
+            services.AddSingleton<IDbFactory>(new MySqlConnection(Configuration.GetConnectionString("ProductsDev")));
 
             services.AddSwaggerGen(c =>
             {

@@ -8,12 +8,12 @@ namespace ProductsWebApi.Interface
     {
         Task<List<Product>> GetProducts();
 
-        Task<Product> GetProductById(string productId);
+        Task<Product> GetProductById(int productId);
 
-        Task<Product> AddProduct(Product productItem);
+        Task<int> AddProduct(Product productItem);
 
-        Task<Product> UpdateProduct(string id, Product productItem);
+        Task<int> UpdateProduct(int id, Product productItem);
 
-        Task<string> DeleteProduct(string id);
+        Task<int> DeleteProduct(int id);
     }
 }

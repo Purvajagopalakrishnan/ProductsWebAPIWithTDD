@@ -12,7 +12,7 @@ namespace ProductsWebApi.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private IProductsService _productsService;
 
         public ProductsController(IProductsService productsService, ILogger logger)
@@ -38,7 +38,7 @@ namespace ProductsWebApi.Controllers
 
         [Route("{productId}")]
         [HttpGet]
-        public async Task<IActionResult> GetProductById(string productId)
+        public async Task<IActionResult> GetProductById(int productId)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(string id, Product product)
+        public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(string id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             try
             {

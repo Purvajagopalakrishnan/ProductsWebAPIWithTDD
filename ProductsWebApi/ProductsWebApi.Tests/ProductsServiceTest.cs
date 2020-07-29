@@ -16,7 +16,8 @@ namespace ProductWebApi.Tests
         private readonly Mock<IProductRepository> _mockproductRepository;
         private readonly ProductsService _productService;
         private readonly Fixture _fixture;
-        private string expectedNullResult = null;
+        private int expectedNullResult = 0;
+        private int expectedSuccessfulResult = 1;
         private Product productRequest = null;
 
         public ProductsServiceTest()
@@ -71,17 +72,19 @@ namespace ProductWebApi.Tests
         }
 
         [Fact]
-        public async Task AddProduct_ValidData_ReturnsValidData()
+        public async Task AddProduct_ValidData_ReturnsNewProductId()
         {
             //Arrange
-            var expextedResult = _fixture.Build<Product>().Create();
-            _mockproductRepository.Setup(x => x.AddProduct(expextedResult)).ReturnsAsync(expextedResult);
+            var testFixture = _fixture.Build<Product>().Create();
+            var expectedResult = testFixture.Id;
+
+            _mockproductRepository.Setup(x => x.AddProduct(It.IsAny<Product>())).ReturnsAsync(expectedResult);
 
             //Act
-            var actualResult = await _productService.AddProduct(expextedResult);
+            var actualResult = await _productService.AddProduct(testFixture);
 
             //Assert
-            actualResult.Should().BeEquivalentTo(expextedResult);
+            Assert.Equal(actualResult, expectedResult);
             _mockproductRepository.VerifyAll();
         }
 
@@ -90,14 +93,14 @@ namespace ProductWebApi.Tests
         {
             //Arrange
             productRequest = _fixture.Build<Product>().Create();
-            _mockproductRepository.Setup(x => x.AddProduct(productRequest)).ReturnsAsync((Product)null);
+            var expectedResult = expectedNullResult;
+            _mockproductRepository.Setup(x => x.AddProduct(It.IsAny<Product>())).ReturnsAsync(expectedResult);
             
             //Act
             var actualResult = await _productService.AddProduct(productRequest);
-            var expectedResult = expectedNullResult;
 
             //Assert
-            actualResult.Should().BeEquivalentTo(expectedResult);
+            Assert.Equal(actualResult, expectedResult);
             _mockproductRepository.VerifyAll();
         }
 
@@ -105,14 +108,16 @@ namespace ProductWebApi.Tests
         public async Task UpdateProduct_ValidData_ReturnsValidData()
         {
             //Arrange
-            var expectedResult = productRequest = _fixture.Build<Product>().Create();
+             productRequest = _fixture.Build<Product>().Create();
+            var expectedResult = expectedSuccessfulResult;
+
             _mockproductRepository.Setup(x => x.UpdateProduct(productRequest.Id, productRequest)).ReturnsAsync(expectedResult);
 
             //Act
             var actualResult = await _productService.UpdateProduct(productRequest.Id, productRequest);
 
             //Assert
-            actualResult.Should().BeEquivalentTo(expectedResult);
+            Assert.Equal(expectedResult, actualResult);
             _mockproductRepository.VerifyAll();
         }
 
@@ -121,14 +126,14 @@ namespace ProductWebApi.Tests
         {
             //Arrange
             productRequest = _fixture.Build<Product>().Create();
-            _mockproductRepository.Setup(x => x.UpdateProduct(productRequest.Id, productRequest)).ReturnsAsync((Product)null);
+            var expectedResult = expectedNullResult;
+            _mockproductRepository.Setup(x => x.UpdateProduct(productRequest.Id, productRequest)).ReturnsAsync(expectedResult);
             
             //Act
             var actualResult = await _productService.UpdateProduct(productRequest.Id, productRequest);
-            var expectedResult = expectedNullResult;
-            
+
             //Assert
-            actualResult.Should().BeEquivalentTo(expectedResult);
+            Assert.Equal(expectedResult, actualResult);
             _mockproductRepository.VerifyAll();
         }
 
@@ -142,9 +147,9 @@ namespace ProductWebApi.Tests
             
             //Act
             var actualResult = await _productService.DeleteProduct(productRequest.Id);
-            
+
             //Assert
-            actualResult.Should().BeEquivalentTo(expectedResult);
+            Assert.Equal(expectedResult, actualResult);
             _mockproductRepository.VerifyAll();
         }
 
@@ -153,14 +158,14 @@ namespace ProductWebApi.Tests
         {
             //Arrange
             productRequest = _fixture.Build<Product>().Create();
-            _mockproductRepository.Setup(x => x.DeleteProduct(productRequest.Id)).ReturnsAsync((string)null);
+            var expectedResult = expectedNullResult;
+            _mockproductRepository.Setup(x => x.DeleteProduct(productRequest.Id)).ReturnsAsync(expectedResult);
             
             //Act
             var actualResult = await _productService.DeleteProduct(productRequest.Id);
-            var expectedResult = expectedNullResult;
-            
+
             //Assert
-            actualResult.Should().BeEquivalentTo(expectedResult);
+            Assert.Equal(expectedResult, actualResult);
             _mockproductRepository.VerifyAll();
         }
     }

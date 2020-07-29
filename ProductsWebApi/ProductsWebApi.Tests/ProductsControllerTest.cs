@@ -102,11 +102,12 @@ namespace ProductsWebApi.Tests
         public async Task AddProduct_ReturnsOkObjectResult()
         {
             //Arrange
-            var expectedResult = _fixture.Build<Product>().Create();
-            _mockProductsService.Setup(x => x.AddProduct(expectedResult)).ReturnsAsync(expectedResult);
+            var productRequestObject = _fixture.Build<Product>().Create();
+            var expectedResult = StatusCodes.Status200OK;
+            _mockProductsService.Setup(x => x.AddProduct(productRequestObject)).ReturnsAsync(expectedResult);
 
             //Act
-            var actualResult = Assert.IsType<OkObjectResult>(await _productsController.AddProduct(expectedResult));
+            var actualResult = Assert.IsType<OkObjectResult>(await _productsController.AddProduct(productRequestObject));
 
             //Assert
             Assert.NotNull(actualResult);
@@ -138,11 +139,12 @@ namespace ProductsWebApi.Tests
         public async Task UpdateProduct_ReturnsOkObjectResult()
         {
             //Arrange
-            var expectedResult = _fixture.Build<Product>().Create();
-            _mockProductsService.Setup(x => x.UpdateProduct(expectedResult.Id, expectedResult)).ReturnsAsync(expectedResult);
+            var productRequestObject = _fixture.Build<Product>().Create();
+            var expectedResult = StatusCodes.Status200OK;
+            _mockProductsService.Setup(x => x.UpdateProduct(productRequestObject.Id, productRequestObject)).ReturnsAsync(expectedResult);
 
             //Act
-            var actualResult = Assert.IsType<OkObjectResult>(await _productsController.UpdateProduct(expectedResult.Id, expectedResult));
+            var actualResult = Assert.IsType<OkObjectResult>(await _productsController.UpdateProduct(productRequestObject.Id, productRequestObject));
 
             //Assert
             Assert.NotNull(actualResult);
