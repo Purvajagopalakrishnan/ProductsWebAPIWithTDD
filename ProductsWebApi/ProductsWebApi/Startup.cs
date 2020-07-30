@@ -29,7 +29,7 @@ namespace ProductsWebApi
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductsService, ProductsService>();
 
-            services.AddSingleton<IDbFactory>(new MySqlConnection(Configuration.GetConnectionString("ProductsDev")));
+            services.AddSingleton<IDbFactory>(new SqlConnection(Configuration.GetConnectionString("ProductsDev")));
 
             services.AddSwaggerGen(c =>
             {

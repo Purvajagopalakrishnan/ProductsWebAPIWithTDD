@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
 using ProductsWebApi.Common;
 using ProductsWebApi.DbFactory;
 using ProductsWebApi.Interface;
@@ -10,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using System;
 
 namespace ProductsWebAPI.Repository
 {
@@ -31,11 +31,12 @@ namespace ProductsWebAPI.Repository
             {
                 using (IDbConnection dbConnection = _dbFactory.GetConnection())
                 {
+                    dbConnection.Open();
                     var products = await dbConnection.QueryAsync<Product>(MySqlQueries.GetProductDataQuery);
                     return products.ToList();
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
                 throw;
@@ -48,11 +49,12 @@ namespace ProductsWebAPI.Repository
             {
                 using (IDbConnection dbConnection = _dbFactory.GetConnection())
                 {
-                    var products = await dbConnection.QueryAsync<Product>(MySqlQueries.GetProductDataByIDQuery);
-                    return products.SingleOrDefault(x => x.Id == productId);
+                    dbConnection.Open();
+                    var products = await dbConnection.QuerySingleAsync<Product>(MySqlQueries.GetProductDataByIDQuery, new { Id = productId});
+                    return products;
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
                 throw;
@@ -65,22 +67,12 @@ namespace ProductsWebAPI.Repository
             {
                 using (IDbConnection dbConnection = _dbFactory.GetConnection())
                 {
-                    using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                    {
-                        var productId = await dbConnection.QuerySingleOrDefaultAsync<int>(MySqlQueries.AddProductQuery, new
-                        {
-                            productItem.Name,
-                            productItem.Description,
-                            productItem.Quantity,
-                            productItem.Price
-                        });
-
-                        transaction.Complete();
-                        return productId;
-                    }
+                    dbConnection.Open();
+                    var productId = await dbConnection.ExecuteScalarAsync<int>(MySqlQueries.AddProductQuery, productItem);
+                    return productId;
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
                 throw;
@@ -91,29 +83,15 @@ namespace ProductsWebAPI.Repository
         {
             try
             {
+                var updateProduct = 0;
                 using (IDbConnection dbConnection = _dbFactory.GetConnection())
                 {
-                    using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                    {
-                        int updateProduct = 0;
-                        if (productItem != null)
-                        {
-                            updateProduct = await dbConnection.ExecuteAsync(MySqlQueries.UpdateProductDataQuery, new
-                            {
-                                productItem.Id,
-                                productItem?.Name,
-                                productItem?.Description,
-                                productItem?.Quantity,
-                                productItem?.Price
-                            });
-                        }
-
-                        transaction.Complete();
-                        return updateProduct;
-                    }
+                   dbConnection.Open();
+                   updateProduct = await dbConnection.ExecuteAsync(MySqlQueries.UpdateProductDataQuery, productItem);
                 }
+                return updateProduct;
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
                 throw;
@@ -126,18 +104,15 @@ namespace ProductsWebAPI.Repository
             {
                 using (IDbConnection dbConnection = _dbFactory.GetConnection())
                 {
-                    using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    dbConnection.Open();
+                    var deleteProduct = await dbConnection.ExecuteAsync(MySqlQueries.DeleteProductDataQuery, new
                     {
-                        var deleteProduct = await dbConnection.ExecuteAsync(MySqlQueries.DeleteProductDataQuery, new
-                        {
-                            Id = id
-                        }).ConfigureAwait(false);
-                        transaction.Complete();
-                        return deleteProduct;
-                    }
+                        Id = id
+                    }).ConfigureAwait(false);
+                    return deleteProduct;
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message, ex.InnerException, ex.StackTrace);
                 throw;

@@ -72,8 +72,15 @@ namespace ProductsWebApi.Controllers
         {
             try
             {
-                await _productsService.UpdateProduct(id, product);
-                return Ok(product);
+                if (id != product.Id)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    await _productsService.UpdateProduct(id, product);
+                    return Ok(product);
+                }
             }
             catch (Exception ex)
             {

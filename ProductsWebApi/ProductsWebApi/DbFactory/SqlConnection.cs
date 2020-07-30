@@ -3,18 +3,18 @@ using System.Data;
 
 namespace ProductsWebApi.DbFactory
 {
-    public class MySqlConnection : IDbFactory
+    public class SqlConnection : IDbFactory
     {
         public string ConnectionString { get; set; }
 
-        public MySqlConnection(string connectionString)
+        public SqlConnection(string connectionString)
         {
             ConnectionString = connectionString;
         }
 
         public IDbConnection GetConnection()
         {
-            return new MySql.Data.MySqlClient.MySqlConnection(ConnectionString);
+            return new System.Data.SqlClient.SqlConnection(ConnectionString);
         }
     }
 }
