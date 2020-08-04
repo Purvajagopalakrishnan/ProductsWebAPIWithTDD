@@ -8,30 +8,30 @@ namespace ProductsWebAPI.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private List<Product> _productItems;
+        private List<Products> _productItems;
 
         public ProductRepository()
         {
-            _productItems = new List<Product>();
+            _productItems = new List<Products>();
         }
 
-        public async Task<List<Product>> GetProducts()
+        public async Task<List<Products>> GetProducts()
         {
             return _productItems;
         }
 
-        public async Task<Product> GetProductById(string productId)
+        public async Task<Products> GetProductById(string productId)
         {
             return _productItems.FirstOrDefault(x => x.Id == productId);
         }
 
-        public async Task<Product> AddProduct(Product productItem)
+        public async Task<Products> AddProduct(Products productItem)
         {
             _productItems.Add(productItem);
             return productItem;
         }
 
-        public async Task<Product> UpdateProduct(string id, Product productItem)
+        public async Task<Products> UpdateProduct(string id, Products productItem)
         {
             for (var index = _productItems.Count - 1; index >= 0; index--)
             {

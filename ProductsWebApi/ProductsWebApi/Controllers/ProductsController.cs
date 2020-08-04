@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ namespace ProductsWebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private ILogger _logger;
@@ -53,7 +55,7 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(Product product)
+        public async Task<IActionResult> AddProduct(Products product)
         {
             try
             {
@@ -68,7 +70,7 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(string id, Product product)
+        public async Task<IActionResult> UpdateProduct(string id, Products product)
         {
             try
             {

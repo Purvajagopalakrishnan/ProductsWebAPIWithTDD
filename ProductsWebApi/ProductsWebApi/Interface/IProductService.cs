@@ -6,13 +6,13 @@ namespace ProductsWebApi.Interface
 {
     public interface IProductsService
     {
-        Task<List<Product>> GetProducts();
+        Task<List<Products>> GetProducts();
 
-        Task<Product> GetProductById(string productId);
+        Task<Products> GetProductById(string productId);
 
-        Task<Product> AddProduct(Product productItem);
+        Task<Products> AddProduct(Products productItem);
 
-        Task<Product> UpdateProduct(string id, Product productItem);
+        Task<Products> UpdateProduct(string id, Products productItem);
 
         Task<string> DeleteProduct(string id);
     }

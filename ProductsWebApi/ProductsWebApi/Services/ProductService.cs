@@ -15,22 +15,22 @@ namespace ProductsWebApi.Services
             _productRepository = productRepository;
         }
 
-        public async Task<List<Product>> GetProducts()
+        public async Task<List<Products>> GetProducts()
         {
             return await _productRepository.GetProducts();
         }
 
-        public async Task<Product> GetProductById(string productId)
+        public async Task<Products> GetProductById(string productId)
         {
             return await _productRepository.GetProductById(productId);
         }
 
-        public async Task<Product> AddProduct(Product productItem)
+        public async Task<Products> AddProduct(Products productItem)
         {
             return await _productRepository.AddProduct(productItem);
         }
 
-        public async Task<Product> UpdateProduct(string id, Product productItem)
+        public async Task<Products> UpdateProduct(string id, Products productItem)
         {
             return await _productRepository.UpdateProduct(id, productItem);
         }
