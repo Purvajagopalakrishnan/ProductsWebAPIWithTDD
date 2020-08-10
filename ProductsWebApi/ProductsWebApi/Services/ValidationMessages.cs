@@ -11,5 +11,6 @@ namespace ProductsWebApi.Services
         public const string PasswordCannotBeEmpty = "Password cannot be Empty";
         public const string UserNameAndPasswordCannotBeEmpty = "UserName and Password cannot be Empty";
         public const string InvalidUserCredentials = "Invalid User Credentials";
+        public const string ValidUserCredentials = "Valid user credentials";
     }
 }

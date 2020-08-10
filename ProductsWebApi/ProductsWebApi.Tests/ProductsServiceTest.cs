@@ -17,7 +17,7 @@ namespace ProductWebApi.Tests
         private readonly ProductsService _productService;
         private readonly Fixture _fixture;
         private string expectedNullResult = null;
-        private Products productRequest = null;
+        private Product productRequest = null;
 
         public ProductsServiceTest()
         {
@@ -30,7 +30,7 @@ namespace ProductWebApi.Tests
         public async Task GetProduct_ValidData()
         {
             //Arrange
-            var expextedResult = _fixture.Build<Products>().CreateMany().ToList();
+            var expextedResult = _fixture.Build<Product>().CreateMany().ToList();
             _mockproductRepository.Setup(x => x.GetProducts()).ReturnsAsync(expextedResult);
             
             //Act
@@ -45,7 +45,7 @@ namespace ProductWebApi.Tests
         public async Task GetProduct_ReturnsNull()
         {
             //Arrange
-            _mockproductRepository.Setup(x => x.GetProducts()).ReturnsAsync((List<Products>)null);
+            _mockproductRepository.Setup(x => x.GetProducts()).ReturnsAsync((List<Product>)null);
 
             //Act
             var actualResult = await _productService.GetProducts();
@@ -59,7 +59,7 @@ namespace ProductWebApi.Tests
         public async Task GetProductById_ReturnProduct()
         {
             //Arrange
-            var expectedResult = _fixture.Build<Products>().Create();
+            var expectedResult = _fixture.Build<Product>().Create();
             _mockproductRepository.Setup(x => x.GetProductById(expectedResult.Id)).ReturnsAsync(expectedResult);
             
             //Act
@@ -74,7 +74,7 @@ namespace ProductWebApi.Tests
         public async Task AddProduct_ValidData_ReturnsValidData()
         {
             //Arrange
-            var expextedResult = _fixture.Build<Products>().Create();
+            var expextedResult = _fixture.Build<Product>().Create();
             _mockproductRepository.Setup(x => x.AddProduct(expextedResult)).ReturnsAsync(expextedResult);
 
             //Act
@@ -89,8 +89,8 @@ namespace ProductWebApi.Tests
         public async Task AddProduct_InvalidData_ReturnsNull()
         {
             //Arrange
-            productRequest = _fixture.Build<Products>().Create();
-            _mockproductRepository.Setup(x => x.AddProduct(productRequest)).ReturnsAsync((Products)null);
+            productRequest = _fixture.Build<Product>().Create();
+            _mockproductRepository.Setup(x => x.AddProduct(productRequest)).ReturnsAsync((Product)null);
             
             //Act
             var actualResult = await _productService.AddProduct(productRequest);
@@ -105,7 +105,7 @@ namespace ProductWebApi.Tests
         public async Task UpdateProduct_ValidData_ReturnsValidData()
         {
             //Arrange
-            var expectedResult = productRequest = _fixture.Build<Products>().Create();
+            var expectedResult = productRequest = _fixture.Build<Product>().Create();
             _mockproductRepository.Setup(x => x.UpdateProduct(productRequest.Id, productRequest)).ReturnsAsync(expectedResult);
 
             //Act
@@ -120,8 +120,8 @@ namespace ProductWebApi.Tests
         public async Task UpdateProduct_InvalidData_ReturnsNull()
         {
             //Arrange
-            productRequest = _fixture.Build<Products>().Create();
-            _mockproductRepository.Setup(x => x.UpdateProduct(productRequest.Id, productRequest)).ReturnsAsync((Products)null);
+            productRequest = _fixture.Build<Product>().Create();
+            _mockproductRepository.Setup(x => x.UpdateProduct(productRequest.Id, productRequest)).ReturnsAsync((Product)null);
             
             //Act
             var actualResult = await _productService.UpdateProduct(productRequest.Id, productRequest);
@@ -136,7 +136,7 @@ namespace ProductWebApi.Tests
         public async Task DeleteProduct_ValidData_ReturnsOkResult()
         {
             //Arrange
-            productRequest = _fixture.Build<Products>().Create();
+            productRequest = _fixture.Build<Product>().Create();
             var expectedResult = productRequest.Id;
             _mockproductRepository.Setup(x => x.DeleteProduct(productRequest.Id)).ReturnsAsync(expectedResult);
             
@@ -152,7 +152,7 @@ namespace ProductWebApi.Tests
         public async Task DeleteProduct_InValidData_ReturnsNull()
         {
             //Arrange
-            productRequest = _fixture.Build<Products>().Create();
+            productRequest = _fixture.Build<Product>().Create();
             _mockproductRepository.Setup(x => x.DeleteProduct(productRequest.Id)).ReturnsAsync((string)null);
             
             //Act

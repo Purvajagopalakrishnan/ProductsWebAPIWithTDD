@@ -338,3 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/ProductsWebApi/ProductsWebApi/Models/Users.cs
+/ProductsWebApi/ProductsWebApi/Models/ProductsDBContext.cs
+/ProductsWebApi/ProductsWebApi/Models/Products.cs
+/ProductsWebApi/ProductsWebApi/Models

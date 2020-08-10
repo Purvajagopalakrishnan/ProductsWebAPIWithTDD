@@ -37,7 +37,7 @@ namespace ProductsWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IProductRepository, ProductRepository>();

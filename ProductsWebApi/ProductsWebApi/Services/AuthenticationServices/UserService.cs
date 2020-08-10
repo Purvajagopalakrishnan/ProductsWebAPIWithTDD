@@ -25,20 +25,12 @@ namespace ProductsWebApi.Services.AuthenticationServices
         {
             _userValidator.ValidateAndThrow(userLoginModel);
 
-            var user = _userRepository.FetchValidUserDetails(userLoginModel.UserName, userLoginModel.Password);
+            var user = _userRepository.FetchUserDetails(userLoginModel.UserName, userLoginModel.Password);
             if (user == null)
-            {
-                return false;
-            }
-            else if (user.UserName == userLoginModel.UserName &&
-                user.Password == userLoginModel.Password)
-            {
-                return true;
-            }
-            else
             {
                 throw new ValidationException(ValidationMessages.InvalidUserCredentials);
             }
+            return true;
         }
     }
 }

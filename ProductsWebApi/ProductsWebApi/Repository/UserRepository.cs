@@ -16,11 +16,10 @@ namespace ProductsWebApi.Repository
         {
             _productsDBContext = productsDBContext;
         }
-        public Users FetchValidUserDetails(string userName, string password)
+
+        public async Task<bool> FetchUserDetails(string userName, string password)
         {
-            return _productsDBContext.Users.Where(user => user.UserName == userName &&
-                                                        user.Password == password)
-                                                        .SingleOrDefault();
+            return _productsDBContext.Users.Any(user => user.UserName == userName && user.Password == password);
         }
     }
 }

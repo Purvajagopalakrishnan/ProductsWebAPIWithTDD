@@ -55,7 +55,7 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(Products product)
+        public async Task<IActionResult> AddProduct(Product product)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(string id, Products product)
+        public async Task<IActionResult> UpdateProduct(string id, Product product)
         {
             try
             {

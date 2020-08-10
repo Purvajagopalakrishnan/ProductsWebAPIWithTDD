@@ -14,39 +14,51 @@ namespace ProductsWebApi.Tests.ValidatorTests
 {
     public class UserValidatorTest
     {
+        private readonly Fixture _fixture;
+        private readonly UserValidator _userValidator;
 
-        [Theory]
-        [InlineData("", "test")]
-        public void UserValidatorTests_WhenUserNameisEmpty_ShouldThrowValidationException(string userName, string password)
+
+        public UserValidatorTest()
         {
-            UserValidator userValidator = new UserValidator();
-            var fixture = new Fixture();
-            var user = fixture.Build<Users>()
-                              .With(x => x.Password, password)
-                              .With(x => x.UserName, userName)
-                              .Create();
+            _fixture = new Fixture();
+            _userValidator = new UserValidator();
+        }
 
-            var actual = userValidator.Validate(user);
+        [Fact]
+        public void UserValidatorTests_WhenUserNameisEmpty_ShouldThrowValidationException()
+        {
+            var user = _fixture.Build<Users>().Create();
             var expected = new ValidationException(ValidationMessages.UserNameCannotBeEmpty);
+
+            var actual = _userValidator.Validate(user);
+
+            Assert.Equal(expected.Message, actual.Errors.FirstOrDefault().ToString());
+        }
+
+        [Fact]
+        public void UserValidatorTests_WhenPasswordisEmpty_ShouldThrowValidationException()
+        {
+            var user = _fixture.Build<Users>().Create();
+            user.Password = "";
+            user.UserName = "testuser";
+            var expected = new ValidationException(ValidationMessages.PasswordCannotBeEmpty);
+
+            var actual = _userValidator.Validate(user);
 
             Assert.Equal(expected.Message, actual.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]
-        [InlineData("test", "")]
-        public void UserValidatorTests_WhenPasswordisEmpty_ShouldThrowValidationException(string userName, string password)
+        [InlineData("testuser","welcome")]
+        [InlineData("newuser","welcome123")]
+        public void UserValidatorTests_WhenValidUserNameAndPassword_ShouldHaveNoError(string userName, string password)
         {
-            UserValidator userValidator = new UserValidator();
-            var fixture = new Fixture();
-            var user = fixture.Build<Users>()
-                              .With(x => x.Password, password)
-                              .With(x => x.UserName, userName)
-                              .Create();
+            var user = new Users { UserName = userName, Password = password };
+            var expected = true;
 
-            var actual = userValidator.Validate(user);
-            var expected = new ValidationException(ValidationMessages.PasswordCannotBeEmpty);
+            var actual = _userValidator.Validate(user);
 
-            Assert.Equal(expected.Message, actual.Errors.FirstOrDefault().ToString());
+            Assert.Equal(expected, actual.IsValid);
         }
     }
 }

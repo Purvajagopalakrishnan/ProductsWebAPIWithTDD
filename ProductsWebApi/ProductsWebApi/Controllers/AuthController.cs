@@ -27,19 +27,16 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpPost]
-        [ActionName("RequestToken")]
         public IActionResult RequestToken([FromBody]Users userLoginModel)
         {
             try
             {
-                if (_userService.IsValidUser(userLoginModel))
-                {
-                    return Ok(GenerateJwtToken());
-                }
-                else
+                if (!_userService.IsValidUser(userLoginModel))
                 {
                     return BadRequest(ValidationMessages.InvalidUserCredentials);
                 }
+                
+                return Ok(GenerateJwtToken());
             }
             catch (ValidationException validationException)
             {

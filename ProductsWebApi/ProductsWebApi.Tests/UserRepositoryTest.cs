@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using ProductsWebApi.DBContext;
@@ -10,9 +11,16 @@ namespace ProductsWebApi.Tests
 {
     public class UserRepositoryTest : MockDBContext
     {
+        private readonly Mock<IProductsDBContext> _productsDbContextMock;
+
+        public UserRepositoryTest()
+        {
+            _productsDbContextMock = new Mock<IProductsDBContext>();
+        }
+
         [Theory]
         [InlineData("user", "123456")]
-        public void FetchValidUserDetails_IfInValidUserNameAndPasswordProvided_ReturnsNull(string userName, string password)
+        public void FetchUserDetails_IfInValidUserNameAndPasswordProvided_ReturnsNull(string userName, string password)
         {
             var mockUsersDbSet = new Mock<DbSet<Users>>();
             var UsersList = new List<Users> {
@@ -24,19 +32,17 @@ namespace ProductsWebApi.Tests
             };
 
             mockUsersDbSet = MockDbSet(UsersList);
-
-            var productsDbContextMock = new Mock<IProductsDBContext>();
-            productsDbContextMock.Setup(x => x.Users).Returns(mockUsersDbSet.Object);
-
-            var userRepository = new UserRepository(productsDbContextMock.Object);
-            var actual = userRepository.FetchValidUserDetails(userName, password);
+            _productsDbContextMock.Setup(x => x.Users).Returns(mockUsersDbSet.Object);
+            var userRepository = new UserRepository(_productsDbContextMock.Object);
+           
+            var actual = userRepository.FetchUserDetails(userName, password);
 
             Assert.Null(actual);
         }
 
         [Theory]
         [InlineData("testuser", "welcome")]
-        public void FetchValidUserDetails_IfValidUserNameAndPasswordProvided_ReturnsValidUserModel(string userName, string password)
+        public async Task FetchUserDetails_IfValidUserNameAndPasswordProvided_ReturnsTrue(string userName, string password)
         {
             var mockUsersDbSet = new Mock<DbSet<Users>>();
             var UsersList = new List<Users> {
@@ -49,15 +55,11 @@ namespace ProductsWebApi.Tests
 
             mockUsersDbSet = MockDbSet(UsersList);
 
-            var productsDbContextMock = new Mock<IProductsDBContext>();
-            productsDbContextMock.Setup(x => x.Users).Returns(mockUsersDbSet.Object);
+            var userRepository = new UserRepository(_productsDbContextMock.Object);
+            var actual = await userRepository.FetchUserDetails(userName, password);
 
-            var userRepository = new UserRepository(productsDbContextMock.Object);
-            var actual = userRepository.FetchValidUserDetails(userName, password);
-
-            Assert.IsType<Users>(actual);
-            Assert.Equal(userName, actual.UserName);
-            Assert.Equal(password, actual.Password);
+            Assert.IsType<bool>(actual);
+            Assert.True(actual);
         }
     }
 }

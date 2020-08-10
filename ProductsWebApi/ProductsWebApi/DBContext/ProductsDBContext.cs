@@ -6,7 +6,7 @@ namespace ProductsWebApi.DBContext
 {
     public class ProductsDBContext : DbContext
     {
-        public DbSet<Products> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Users> Users { get; set; }
 
         public ProductsDBContext(DbContextOptions<ProductsDBContext> options)

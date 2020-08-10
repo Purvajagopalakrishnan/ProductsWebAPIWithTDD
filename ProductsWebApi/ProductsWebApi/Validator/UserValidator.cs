@@ -17,6 +17,7 @@ namespace ProductsWebApi.Validator
 
             RuleFor(user => user.Password)
                 .NotEmpty().WithMessage(ValidationMessages.PasswordCannotBeEmpty);
+
         }
     }
 }

@@ -8,6 +8,6 @@ namespace ProductsWebApi.Interface
 {
     public interface IUserRepository
     {
-        Users FetchValidUserDetails(string userName, string password);
+        Task<bool> FetchUserDetails(string userName, string password);
     }
 }

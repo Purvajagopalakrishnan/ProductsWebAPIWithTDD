@@ -9,7 +9,7 @@ namespace ProductsWebApi.DBContext
 {
     public interface IProductsDBContext
     {
-        DbSet<Products> Products { get; set; }
+        DbSet<Product> Products { get; set; }
         DbSet<Users> Users { get; set; }
     }
 }
