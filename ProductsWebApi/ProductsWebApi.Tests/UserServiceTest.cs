@@ -15,16 +15,19 @@ namespace ProductsWebApi.Tests
     {
         private readonly Fixture _fixture;
         private readonly UserService _userService;
+        private readonly IUserRepository _mockUserRepository;
 
         public UserServiceTest()
         {
             _fixture = new Fixture();
             _userService = new UserService(Mock.Of<IUserRepository>(), new UserValidator());
+            _mockUserRepository = Mock.Of<IUserRepository>();
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
+        [InlineData(" ")]
         public void IsValidUser_IfUserNameIsNullOrEmpty_ThrowsValidationException(string userName)
         {
             var user = _fixture.Build<Users>()
@@ -41,6 +44,7 @@ namespace ProductsWebApi.Tests
         [Theory]
         [InlineData("")]
         [InlineData(null)]
+        [InlineData(" ")]
         public void IsValidUser_IfPasswordIsNullOrEmpty_ThrowsValidationException(string password)
         {
             var user = _fixture.Build<Users>()
@@ -66,14 +70,13 @@ namespace ProductsWebApi.Tests
             var invalidUserDetails = _fixture.Build<Users>()
                         .Create();
 
-            var mockUserRepository = Mock.Of<IUserRepository>();
-            Mock.Get(mockUserRepository)
-                .Setup(x => x.FetchUserDetails(user.UserName, user.Password))
+            Mock.Get(_mockUserRepository)
+                .Setup(x => x.FetchUserDetails(user))
                 .ReturnsAsync(false);
 
             var expectedException = new ValidationException(ValidationMessages.InvalidUserCredentials);
            
-            var actualException = Assert.Throws<ValidationException>(() => _userService.IsValidUser(user));
+            var actualException = Assert.Throws<ValidationException>(() => _userService.IsValidUser(invalidUserDetails));
 
             Assert.Equal(expectedException.Message, actualException.Message);
         }
@@ -87,11 +90,9 @@ namespace ProductsWebApi.Tests
                               .With(x => x.UserName, userName)
                               .Create();
 
-            var mockUserRepository = Mock.Of<IUserRepository>();
-            Mock.Get(mockUserRepository)
-                .Setup(x => x.FetchUserDetails(user.UserName, user.Password))
+            Mock.Get(_mockUserRepository)
+                .Setup(x => x.FetchUserDetails(user))
                 .ReturnsAsync(true);
-
 
             var actual = _userService.IsValidUser(user);
 

@@ -1,4 +1,5 @@
-﻿using ProductsWebApi.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductsWebApi.DBContext;
 using ProductsWebApi.Interface;
 using ProductsWebApi.Models;
 using System;
@@ -17,9 +18,9 @@ namespace ProductsWebApi.Repository
             _productsDBContext = productsDBContext;
         }
 
-        public async Task<bool> FetchUserDetails(string userName, string password)
+        public async Task<bool> FetchUserDetails(Users users)
         {
-            return _productsDBContext.Users.Any(user => user.UserName == userName && user.Password == password);
+            return await _productsDBContext.Users.AnyAsync(user => user.UserName == users.UserName && user.Password == users.Password);
         }
     }
 }

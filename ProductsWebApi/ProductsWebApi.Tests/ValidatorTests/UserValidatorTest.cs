@@ -17,35 +17,39 @@ namespace ProductsWebApi.Tests.ValidatorTests
         private readonly Fixture _fixture;
         private readonly UserValidator _userValidator;
 
-
         public UserValidatorTest()
         {
             _fixture = new Fixture();
             _userValidator = new UserValidator();
         }
 
-        [Fact]
-        public void UserValidatorTests_WhenUserNameisEmpty_ShouldThrowValidationException()
+        [Theory]
+        [InlineData ("", "test")]
+        public void UserValidatorTests_WhenUserNameisEmpty_ShouldThrowValidationException(string userName, string password)
         {
-            var user = _fixture.Build<Users>().Create();
+            var user = _fixture.Build<Users>().With(x => x.Password, password)
+                                          .With(x => x.UserName, userName).Create();
             var expected = new ValidationException(ValidationMessages.UserNameCannotBeEmpty);
 
             var actual = _userValidator.Validate(user);
 
             Assert.Equal(expected.Message, actual.Errors.FirstOrDefault().ToString());
+            Assert.False(actual.IsValid);
+
         }
 
-        [Fact]
-        public void UserValidatorTests_WhenPasswordisEmpty_ShouldThrowValidationException()
+        [Theory]
+        [InlineData("testuser", "")]
+        public void UserValidatorTests_WhenPasswordisEmpty_ShouldThrowValidationException(string userName, string password)
         {
-            var user = _fixture.Build<Users>().Create();
-            user.Password = "";
-            user.UserName = "testuser";
+            var user = _fixture.Build<Users>().With(x => x.UserName, userName)
+                                              .With(x => x.Password, password).Create();
             var expected = new ValidationException(ValidationMessages.PasswordCannotBeEmpty);
 
             var actual = _userValidator.Validate(user);
 
             Assert.Equal(expected.Message, actual.Errors.FirstOrDefault().ToString());
+            Assert.False(actual.IsValid);
         }
 
         [Theory]
@@ -59,6 +63,7 @@ namespace ProductsWebApi.Tests.ValidatorTests
             var actual = _userValidator.Validate(user);
 
             Assert.Equal(expected, actual.IsValid);
+            Assert.True(actual.IsValid);
         }
     }
 }
