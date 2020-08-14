@@ -53,7 +53,7 @@ namespace ProductsWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(Product product)
+        public async Task<IActionResult> AddProduct([FromBody]Product product)
         {
             try
             {

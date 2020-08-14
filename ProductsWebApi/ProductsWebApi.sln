@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductsWebApi", "ProductsWebApi\ProductsWebApi.csproj", "{701E9A16-7948-4653-84D0-00AC2E1BF9EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsWebApi", "ProductsWebApi\ProductsWebApi.csproj", "{701E9A16-7948-4653-84D0-00AC2E1BF9EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductsWebApi.Tests", "ProductsWebApi.Tests\ProductsWebApi.Tests.csproj", "{B9A924F5-4E98-4474-9030-7D12957A3FED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsWebApi.Tests", "ProductsWebApi.Tests\ProductsWebApi.Tests.csproj", "{B9A924F5-4E98-4474-9030-7D12957A3FED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Products.integrationTests", "Products.integrationTests\Products.integrationTests.csproj", "{B4EF8786-712C-448E-BCB8-BFF1AB15BAE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B9A924F5-4E98-4474-9030-7D12957A3FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9A924F5-4E98-4474-9030-7D12957A3FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9A924F5-4E98-4474-9030-7D12957A3FED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4EF8786-712C-448E-BCB8-BFF1AB15BAE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4EF8786-712C-448E-BCB8-BFF1AB15BAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4EF8786-712C-448E-BCB8-BFF1AB15BAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4EF8786-712C-448E-BCB8-BFF1AB15BAE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
